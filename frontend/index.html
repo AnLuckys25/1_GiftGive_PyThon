@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kho Hàng</title>
+</head>
+<body>
+    <a href="index.html" class="nav-link">Trang Chủ</a>
+    <a href="admin.html" class="nav-link">Quản Trị Admin</a>
+
+    <h1>Danh sách sản phẩm</h1>
+    <ul id="product-list"></ul>
+
+    <script>
+        async function fetchProducts() {
+            const list = document.getElementById("product-list");
+            try {
+                const response = await fetch("/api/products");
+                if (!response.ok) throw new Error("Không thể kết nối tới Backend");
+                
+                const result = await response.json();
+                
+                // Xóa danh sách cũ nếu có
+                list.innerHTML = ""; 
+                
+                result.data.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = `${item.name} - Số lượng: ${item.stock}`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                list.innerHTML = `<li style="color:red;">Lỗi: ${error.message}</li>`;
+                console.error(error);
+            }
+        }
+        fetchProducts();
+    </script>
+</body>
+</html>

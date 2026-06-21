@@ -1,0 +1,39 @@
+/* Màu nền chung */
+body { background-color: #e8f5e9; }
+
+/* Card cơ bản cho các ô thống kê (chiều cao 100px) */
+.card { 
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    background: #fff;
+    height: 100px; 
+}
+
+/* Card lớn cho biểu đồ và kho hàng */
+.content-card {
+    height: 450px !important; /* Ghi đè chiều cao */
+    padding: 20px;
+}
+
+/* Hiệu ứng Nav Link */
+.nav-link {
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 5px 15px;
+    font-weight: 500;
+}
+
+.nav-link:hover { color: #198754; font-weight: bold; }
+.nav-link.active {
+    color: #198754;
+    font-weight: bold;
+    border-bottom: 3px solid #198754;
+}
+
+/* Các tiện ích khác */
+.border-end { border-right: 1px solid #ccc !important; }
+.fw-bold { font-weight: 700; }
+.fs-4 { font-size: 1.5rem; }
+.table-sm { font-size: 0.9rem; }
