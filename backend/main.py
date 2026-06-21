@@ -3,10 +3,16 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+import uvicorn
 from database import SessionLocal, Product, User, Campaign, Donation
 from fastapi.staticfiles import StaticFiles
 
+
 app = FastAPI()
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000)) # Render thường dùng cổng 10000
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 app.add_middleware(
     CORSMiddleware,
