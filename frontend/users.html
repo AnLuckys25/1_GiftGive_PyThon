@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>GiftGive - Quản lý Người dùng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-success navbar-custom">
+    <div class="container d-flex align-items-center">
+        <div class="d-flex align-items-center"><img src="images/My_Logo.png" class="logo-img"> <h2 class="logo-brand m-0 ms-2">GiftGive</h2></div>
+        <div class="slogan-center"><h3 class="m-0">Love in Anywhere</h3></div>
+        <div class="admin-info text-white ms-auto"><strong>Welcome Admin comeback</strong></div>
+    </div>
+</nav>
+
+<div class="wrapper">
+    <nav class="sidebar p-3">
+        <div class="nav flex-column gap-2">
+            <a href="admin.html" class="nav-link"><i class="bi bi-columns-gap"></i> DashBoard</a>
+            <a href="campaigns.html" class="nav-link"><i class="bi bi-megaphone"></i> Chiến dịch</a>
+            <a href="inventory.html" class="nav-link"><i class="bi bi-box-seam"></i> Kho</a>
+            <a href="users.html" class="nav-link active"><i class="bi bi-people"></i> Người dùng</a>
+            <a href="logs.html" class="nav-link"><i class="bi bi-journal-bookmark"></i> Nhật ký</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container-fluid">
+            <div class="content-card">
+                <h4 class="mb-3">Quản lý Người dùng</h4>
+                
+                <div class="row mb-3 align-items-center">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                            <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm người dùng...">
+                        </div>
+                    </div>
+                    <div class="col-md-7 text-end">
+                        <button class="btn btn-success me-2" onclick="loadUsers()">Tải lại</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">+ Thêm Người dùng</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr><th>UID</th><th>Tên ID</th><th>Tên đăng ký</th><th>Email</th><th>Quyền</th><th>Trạng thái</th><th>Hành động</th></tr>
+                        </thead>
+                        <tbody id="user-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+            <div class="d-flex justify-content-end align-items-center mt-3 pagination-text">
+                <span class="me-3">Page 1</span>
+                <span class="me-2" style="cursor: pointer;">|<</span>
+                <span class="me-2" style="cursor: pointer;"><</span>
+                <span class="me-2 fw-bold text-dark">1</span>
+                <span class="me-2" style="cursor: pointer;">></span>
+                <span style="cursor: pointer;">>|</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lockModal" tabindex="-1" aria-labelledby="lockModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="lockModalLabel"><i class="bi bi-exclamation-triangle-fill me-2"></i>Kỷ luật tài khoản</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="lockTargetUserId">
+                    <p>Bạn đang thực hiện khóa tài khoản. Hãy lựa chọn điều khoản vi phạm từ <strong>Quy định hệ thống</strong>:</p>
+                    <div class="mb-3">
+                        <label for="ruleSelect" class="form-label fw-bold">Điều khoản vi phạm:</label>
+                        <select class="form-select" id="ruleSelect"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="button" class="btn btn-danger" onclick="executeLockUser()">Xác nhận khóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Thêm mới người dùng
+                </h5>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="text"
+                       id="new-username"
+                       class="form-control mb-3"
+                       placeholder="Tên đăng nhập">
+
+                <input type="text"
+                       id="new-fullname"
+                       class="form-control mb-3"
+                       placeholder="Họ tên">
+
+                <input type="email"
+                       id="new-email"
+                       class="form-control mb-3"
+                       placeholder="Email">
+
+                <select id="new-role" class="form-select">
+                    <option value="Donor">Người quyên góp</option>
+                    <option value="Recipient">Người nhận</option>
+                    <option value="Admin">Admin</option>
+                </select>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary"
+                        onclick="addUser()">
+                    Lưu
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Thông báo</h5>
+            </div>
+
+            <div class="modal-body text-center">
+                <span id="successMessage"></span>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success"
+                        data-bs-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let allUsers = []; 
+let bootstrapLockModal;
+
+function showSuccess(message){
+
+    document.getElementById("successMessage").innerText = message;
+
+    const modal =
+        new bootstrap.Modal(
+            document.getElementById("successModal")
+        );
+
+    modal.show();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadUsers();
+    bootstrapLockModal = new bootstrap.Modal(document.getElementById('lockModal'));
+});
+
+// 1. Hàm tải dữ liệu người dùng
+async function loadUsers() {
+    try {
+        const res = await fetch("/api/users");
+        const result = await res.json();
+        allUsers = result.data || []; 
+        renderTable(allUsers);
+    } catch (e) {
+        console.error("Lỗi load danh sách người dùng:", e);
+    }
+}
+
+// 2. Hàm render dữ liệu vào bảng
+function renderTable(usersList) {
+    const body = document.getElementById("user-body");
+    body.innerHTML = "";
+
+    if (usersList.length === 0) {
+        body.innerHTML = `<tr><td colspan="7" class="text-center py-3">Không tìm thấy người dùng nào.</td></tr>`;
+        return;
+    }
+
+    usersList.forEach(user => {
+        let displayId = user.user_code || `US${user.user_id.toString().padStart(3, '0')}`;
+        
+        // Thiết lập Badge trạng thái màu sắc phù hợp
+        let badgeClass = "bg-success"; 
+        if (user.status === "Bị khóa") {
+            badgeClass = "bg-danger";
+        } else if (user.status === "Chờ xác minh") {
+            badgeClass = "bg-warning text-dark";
+        }
+        
+        // Tạo nút bấm Khóa/Mở khóa động linh hoạt
+        let actionLockBtn = "";
+        if (user.status === "Bị khóa") {
+            actionLockBtn = `<button class="btn btn-sm btn-outline-success me-1" onclick="unlockUser(${user.user_id})"><i class="bi bi-unlock-fill"></i> Mở khóa</button>`;
+        } else {
+            actionLockBtn = `<button class="btn btn-sm btn-outline-danger me-1" onclick="openLockModal(${user.user_id})"><i class="bi bi-lock-fill"></i> Khóa</button>`;
+        }
+        
+        body.innerHTML += `
+            <tr>
+                <td><strong>${displayId}</strong></td>
+                <td>${user.username}</td>
+                <td>${user.full_name || 'Chưa cập nhật'}</td>
+                <td>${user.email || 'Chưa cập nhật'}</td>
+                <td><span class="badge bg-secondary">${user.role}</span></td>
+                <td>
+                    <span class="badge ${badgeClass}">${user.status || 'Hoạt động'}</span>
+                    ${user.lock_reason ? `<div class="small text-danger mt-1"><i class="bi bi-info-circle"></i> ${user.lock_reason}</div>` : ''}
+                </td>
+                <td>
+                    ${actionLockBtn}
+                    <a href="user_detail.html?id=${user.user_id}" class="btn btn-action-view me-1">Chi tiết</a>
+                    <button class="btn btn-action-delete" onclick="deleteUser(${user.user_id})">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// === XỬ LÝ KHÓA TÀI KHOẢN KẾT HỢP GỌI LUẬT ĐỘNG TỪ DATABASE ===
+
+// Bước A: Mở modal và fetch danh sách quy định thuộc nhóm LOCK_USER đổ vào select
+async function openLockModal(userId) {
+    document.getElementById("lockTargetUserId").value = userId;
+    const ruleSelect = document.getElementById("ruleSelect");
+    ruleSelect.innerHTML = "<option>Đang tải quy định hệ thống...</option>";
+    
+    try {
+        const res = await fetch("/api/regulations?group=LOCK_USER");
+        const result = await res.json();
+        const rules = result.data || [];
+        
+        if (rules.length === 0) {
+            ruleSelect.innerHTML = "<option value='Vi phạm tiêu chuẩn cộng đồng'>Vi phạm tiêu chuẩn hệ thống chung</option>";
+        } else {
+            ruleSelect.innerHTML = rules.map(r => 
+                `<option value="[${r.rule_code}] ${r.rule_name}">${r.rule_code} - ${r.rule_name}</option>`
+            ).join("");
+        }
+    } catch (e) {
+        ruleSelect.innerHTML = "<option value='Vi phạm tiêu chuẩn cộng đồng'>Lỗi tải luật - Áp dụng khóa chung</option>";
+    }
+    
+    bootstrapLockModal.show();
+}
+
+// Bước B: Đẩy request lên API cập nhật lý do và trạng thái thành "Bị khóa"
+async function executeLockUser() {
+    const userId = document.getElementById("lockTargetUserId").value;
+    const selectReason = document.getElementById("ruleSelect").value;
+    
+    try {
+        const res = await fetch(`/api/users/${userId}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                status: "Bị khóa",
+                lock_reason: selectReason
+            })
+        });
+        
+        if (res.ok) {
+            bootstrapLockModal.hide();
+            alert("Đã áp dụng hình thức kỷ luật khóa tài khoản!");
+            loadUsers();
+        } else {
+            alert("Thao tác thất bại.");
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// Bước C: Hàm mở khóa tài khoản đưa trạng thái về lại "Hoạt động" công khai
+async function unlockUser(userId) {
+    if (confirm("Bạn có chắc chắn muốn khôi phục trạng thái hoạt động cho tài khoản này?")) {
+        try {
+            const res = await fetch(`/api/users/${userId}/status`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    status: "Hoạt động",
+                    lock_reason: ""
+                })
+            });
+            if (res.ok) {
+                alert("Đã mở khóa tài khoản thành công!");
+                loadUsers();
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}
+
+// 3. Xử lý chức năng TÌM KIẾM thực tế khi gõ chữ
+document.getElementById("searchInput").addEventListener("input", function(e) {
+    const keyword = e.target.value.toLowerCase().trim();
+    const body = document.getElementById("user-body");
+    
+    // Nếu rỗng, hiển thị lại toàn bộ
+    if (keyword === "") {
+        renderTable(allUsers);
+        return;
+    }
+
+    // 1. Lọc và Sắp xếp: Ưu tiên những kết quả khớp từ đầu (startsWith)
+    const filteredUsers = allUsers.filter(user => {
+        return (user.username && user.username.toLowerCase().includes(keyword)) ||
+               (user.full_name && user.full_name.toLowerCase().includes(keyword)) ||
+               (user.email && user.email.toLowerCase().includes(keyword));
+    }).sort((a, b) => {
+        // Xếp kết quả "bắt đầu bằng" lên trên
+        const aStarts = a.username.toLowerCase().startsWith(keyword) ? 0 : 1;
+        const bStarts = b.username.toLowerCase().startsWith(keyword) ? 0 : 1;
+        return aStarts - bStarts;
+    });
+
+    // 2. Render lại bảng với hiệu ứng Highlight
+    renderTableWithHighlight(filteredUsers, keyword);
+});
+
+// Hàm render bảng có kèm highlight
+function renderTableWithHighlight(usersList, keyword) {
+    const body = document.getElementById("user-body");
+    body.innerHTML = "";
+
+    usersList.forEach(user => {
+        // Tạo hàm highlight chuỗi
+        const highlight = (text) => {
+            if (!text) return "";
+            const regex = new RegExp(`(${keyword})`, 'gi');
+            return text.replace(regex, `<span class="highlight">$1</span>`);
+        };
+
+        body.innerHTML += `
+            <tr>
+                <td><strong>${user.user_code}</strong></td>
+                <td>${highlight(user.username)}</td>
+                <td>${highlight(user.full_name || '')}</td>
+                <td>${highlight(user.email || '')}</td>
+                <td><span class="badge bg-secondary">${user.role}</span></td>
+                <td><span class="badge ${user.status === 'Bị khóa' ? 'bg-danger' : 'bg-success'}">${user.status}</span></td>
+                <td>... nút hành động của bạn ...</td>
+            </tr>
+        `;
+    });
+}
+// 4. Hàm xóa người dùng
+async function deleteUser(id) {
+    if (confirm("Bạn có chắc chắn muốn xóa vĩnh viễn tài khoản người dùng này?")) {
+        try {
+            const res = await fetch(`/api/users/${id}`, { method: "DELETE" });
+            const data = await res.json();
+            if(res.ok && data.status === "success") {
+                alert("Đã xóa người dùng thành công!");
+                loadUsers();
+            } else {
+                alert("Xóa thất bại: " + (data.message || "Lỗi ràng buộc dữ liệu"));
+            }
+        } catch (error) {
+            console.error("Lỗi khi xóa:", error);
+        }
+    }
+}
+
+// 5. Hàm thêm người dùng mới
+async function addUser() {
+
+    const username =
+        document.getElementById("new-username").value;
+
+    const full_name =
+        document.getElementById("new-fullname").value;
+
+    const email =
+        document.getElementById("new-email").value;
+
+    const role =
+        document.getElementById("new-role").value;
+
+    try {
+
+        const res = await fetch("/api/users",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username,
+                full_name,
+                email,
+                role
+            })
+        });
+
+        if(res.ok){
+
+            bootstrap.Modal
+                .getInstance(
+                    document.getElementById("addUserModal")
+                )
+                .hide();
+
+            showSuccess(
+                "Hệ thống đã thêm người dùng thành công!"
+            );
+
+            loadUsers();
+        }
+
+    } catch(e){
+        console.error(e);
+    }
+}
+</script>
+</body>
+</html>

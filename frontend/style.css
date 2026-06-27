@@ -1,39 +1,77 @@
-/* Màu nền chung */
-body { background-color: #e8f5e9; }
+/* --- RESET --- */
+* { box-sizing: border-box; }
+body, html {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Ngăn cuộn toàn trang */
+    font-family: Roboto;
+}
 
-/* Card cơ bản cho các ô thống kê (chiều cao 100px) */
-.card { 
-    border: 1px solid #ddd;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+/* --- BỐ CỤC CHÍNH --- */
+.wrapper {
+    display: flex;
+    height: calc(100vh - 75px); /* Trừ chiều cao navbar */
+    width: 100vw;
+}
+
+/* --- SIDEBAR (CỐ ĐỊNH) --- */
+.sidebar {
+    width: 250px;
     background: #fff;
-    height: 100px; 
+    border-right: 1px solid #dee2e6;
+    flex-shrink: 0;
+    overflow-y: auto; /* Chỉ cuộn nếu menu quá dài */
 }
 
-/* Card lớn cho biểu đồ và kho hàng */
-.content-card {
-    height: 450px !important; /* Ghi đè chiều cao */
+/* --- MAIN CONTENT (CUỘN RIÊNG) --- */
+main {
+    flex: 1;
+    overflow-y: auto; /* Chỉ phần này cuộn */
     padding: 20px;
+    background-color: #f8f9fa;
 }
 
-/* Hiệu ứng Nav Link */
-.nav-link {
+/* --- NAVBAR --- */
+.navbar-custom { 
+    height: 75px; 
+    background-color: #198754; 
+    z-index: 1000; 
+}
+
+/* --- LOGO & THÔNG TIN --- */
+.logo-img { height: 50px; width: auto; object-fit: contain; }
+.logo-brand { font-family: 'Pacifico', cursive !important; font-size: 2rem !important; color: white !important; }
+.slogan-center { position: absolute; left: 50%; transform: translateX(-50%); color: white;font-family: 'Pacifico', cursive !important; font-size: 2.2rem !important; }
+.admin-info { font-family: 'Pacifico', cursive !important; color: white !important; }
+
+/* --- SIDEBAR LINKS --- */
+.sidebar .nav-link {
+    font-family: 'Pacifico', cursive !important;
+    font-size: 1.1rem;
     color: #333;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 5px 15px;
-    font-weight: 500;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: 0.3s;
+    border-radius: 8px;
+    margin: 4px 10px;
 }
+.sidebar .nav-link:hover { background-color: #f1f8e9; color: #198754; }
+.sidebar .nav-link.active { background-color: #198754; color: white !important; }
 
-.nav-link:hover { color: #198754; font-weight: bold; }
-.nav-link.active {
-    color: #198754;
-    font-weight: bold;
-    border-bottom: 3px solid #198754;
+/* --- COMPONENTS --- */
+.card { 
+    background-color: #ffffff !important; 
+    border: 1px solid #e0e0e0 !important; 
+    border-radius: 12px !important; 
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important; 
 }
+.content-card { @extend .card; padding: 20px; margin-bottom: 20px; border-radius: 25px; }
 
-/* Các tiện ích khác */
-.border-end { border-right: 1px solid #ccc !important; }
-.fw-bold { font-weight: 700; }
-.fs-4 { font-size: 1.5rem; }
-.table-sm { font-size: 0.9rem; }
+#productChart { width: 100% !important; height: 300px !important; }
+
+/* --- TIỆN ÍCH --- */
+.table-danger { background-color: #f8d7da !important; }
+.table-warning { background-color: #fff3cd !important; }

@@ -5,114 +5,230 @@
     <title>GiftGive - Admin Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-success py-3">
-        <div class="container">
-            <h2 class="text-white">GiftGive</h2>
-            <h3 class="text-white">Love in Anywhere</h3>
-            <div class="text-white"><strong>Welcome Admin comeback</strong></div>
+   <nav class="navbar navbar-dark bg-success navbar-custom">
+    <div class="container d-flex align-items-center">
+        <div class="d-flex align-items-center"><img src="images/My_Logo.png" class="logo-img"> <h2 class="logo-brand m-0 ms-2">GiftGive</h2></div>
+        <div class="slogan-center"><h3 class="m-0">Love in Anywhere</h3></div>
+        <div class="admin-info text-white ms-auto"><strong>Welcome Admin comeback</strong></div>
+    </div>
+</nav>
+
+<div class="wrapper">
+    <nav class="sidebar p-3">
+        <div class="nav flex-column gap-2">
+             <a href="admin.html" class="nav-link active"><i class="bi bi-columns-gap"></i>DashBoard</a>
+        <a href="campaigns.html" class="nav-link"><i class="bi bi-megaphone"></i>Chiến dịch</a>
+        <a href="inventory.html" class="nav-link"><i class="bi bi-box-seam"></i>Kho</a>
+        <a href="users.html" class="nav-link"><i class="bi bi-people"></i>Người dùng</a>
+        <a href="logs.html" class="nav-link"><i class="bi bi-journal-bookmark"></i>Nhật ký</a>
         </div>
     </nav>
 
-    <div class="bg-white border-bottom shadow-sm py-2 mb-4">
-        <div class="container d-flex justify-content-center gap-4">
-            <a href="admin.html" class="nav-link active">DashBoard</a>
-            <a href="campaigns.html" class="nav-link">Chiến dịch</a>
-            <a href="#" class="nav-link">Kho</a>
-            <a href="#" class="nav-link">Người dùng</a>
-            <a href="#" class="nav-link">Nhật ký</a>
-        </div>
-    </div>
+    <main class="flex-grow-1 p-4">
+      <div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card p-3"><h6>Tổng người dùng</h6><div class="fs-4 fw-bold" id="user-count">0</div></div></div>
+    
+    <div class="col-md-3"><div class="card p-3"><h6>Chiến dịch</h6><div class="fs-4 fw-bold" id="campaign-count">0</div></div></div>
+    
+    <div class="col-md-3"><div class="card p-3"><h6>Tài khoản quyên góp</h6><div class="fs-4 fw-bold" id="donor-count">0</div></div></div>
+    
+    <div class="col-md-3"><div class="card p-3"><h6>Tổng quỹ mục tiêu (VNĐ)</h6><div class="fs-4 fw-bold" id="total-fund">0</div></div></div>
+</div>
 
-    <div class="container">
-        <div class="row g-3 mb-4">
-            <div class="col-md-4">
-                <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                    <div class="text-center w-50 border-end fw-bold"><small>Người Quyên góp</small><div class="fw-bold fs-4">0</div></div>
-                    <div class="text-center w-50 fw-bold"><small>Người Nhận</small><div class="fw-bold fs-4">0</div></div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="content-card p-4">
+                    <h5>Số lượng sản phẩm trong kho</h5>
+                    <div style="height: 300px;"><canvas id="productChart"></canvas></div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card p-3 d-flex flex-row justify-content-between align-items-center">
-                    <div class="text-center w-50 border-end fw-bold"><small>Sản phẩm Còn</small><div class="fw-bold fs-4" id="stock-count">0</div></div>
-                    <div class="text-center w-50 fw-bold"><small> Sản phẩm Hết/Sắp hết</small><div class="fw-bold fs-4">0</div></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 text-center d-flex flex-column justify-content-center fw-bold">
-                    <small>Số chiến dịch</small><div class="fw-bold fs-4">0</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row g-3">
-            <div class="col-md-4">
-                <div class="content-card p-3">
-                    <h5>Biểu đồ Quỹ</h5>
-                    <canvas id="myChart" class="mt-3"></canvas>
-                </div>
-            </div>
-            <div class="col-md-8">
-                <div class="content-card p-3">
+            <div class="col-lg-6">
+                <div class="content-card p-4">
                     <h5>Quản lý kho hàng</h5>
-                    <div class="input-group mb-3">
-                        <input type="text" id="name" class="form-control" placeholder="Tên sản phẩm">
-                        <input type="number" id="stock" class="form-control" placeholder="SL">
-                        <button class="btn btn-success" onclick="addProduct()">Thêm</button>
-                    </div>
-                    <div class="table-wrapper">
-                        <table class="table table-sm">
-                            <thead><tr><th>ID</th><th>Tên</th><th>SL</th></tr></thead>
-                            <tbody id="product-body"></tbody>
-                        </table>
-                    </div>
+                    <table class="table table-hover">
+                        <thead><tr><th>Tên</th><th>SL</th><th>Đơn vị</th></tr></thead>
+                        <tbody id="product-body"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
+        <div class="content-card p-4 shadow-sm">
+        <h5>Trường hợp khẩn cấp đã duyệt</h5>
+        <table class="table table-hover">
+            <thead><tr><th>Tên/Đại diện</th><th>Địa chỉ</th><th>Tình trạng</th><th>Chi tiết</th></tr></thead>
+            <tbody id="recipient-body"></tbody>
+        </table>
     </div>
+</div>
+    </main>
+</div> 
+
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        async function loadData() {
-            try {
-                const res = await fetch("/api/products");
-                const result = await res.json();
-                const body = document.getElementById("product-body");
-                body.innerHTML = "";
-                let total = 0;
-                result.data.forEach(item => {
-                    body.innerHTML += `<tr><td>${item.id}</td><td>${item.name}</td><td>${item.stock}</td></tr>`;
-                    total += item.stock;
-                });
-                document.getElementById("stock-count").innerText = total;
-            } catch (e) { console.error("Lỗi load dữ liệu"); }
-        }
+       let productChartInstance = null;
+async function loadData() {
+    try {
+        const res = await fetch("/api/products");
+        const result = await res.json();
+        const body = document.getElementById("product-body");
+        body.innerHTML = "";
+        
+        let totalStock = 0;
+        let warningCount = 0;
 
-        async function addProduct() {
-            const name = document.getElementById("name").value;
-            const stock = document.getElementById("stock").value;
-            await fetch("/api/products", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, stock: parseInt(stock) })
-            });
-            loadData();
-        }
+       result.data.forEach(item => {
+            let rowClass = "";
+            // Kiểm tra trạng thái: hết (0) hoặc sắp hết (<=5)
+            if (item.stock === 0) {
+                rowClass = "table-danger";
+                warningCount++;
+            } else if (item.stock <= 5) {
+                rowClass = "table-warning";
+                warningCount++;
+            }
 
-        const ctx = document.getElementById('myChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Hiện vật', 'Hiện kim'],
-                datasets: [{ data: [60, 40], backgroundColor: ['#d19595', '#a5d6a7'] }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
+            body.innerHTML += `<tr class="${rowClass}">
+             <td>${item.product_code}</td> <td>${item.name}</td>
+             <td>${item.stock}</td>
+              <td>${item.unit}</td>
+             <td>${item.category}</td>
+            </tr>`;
+            
+            totalStock += item.stock;
         });
 
-        loadData();
+        // 1. Cập nhật tổng số sản phẩm còn trong kho
+        document.getElementById("stock-count").innerText = totalStock;
+        document.getElementById("warning-count").innerText = warningCount;
+        
+        console.log("Số sản phẩm sắp hết/hết:", warningCount);
+        
+    } catch (e) { 
+        console.error("Lỗi load dữ liệu sản phẩm:", e); 
+    }
+      
+}
+// Cập nhật hàm addProduct
+async function addProduct() {
+    const name = document.getElementById("name").value;
+    const stock = parseInt(document.getElementById("stock").value);
+    const unit = document.getElementById("unit").value;
+    const category = document.getElementById("category").value || "Chưa phân loại";
+
+    if (stock < 0) { alert("Số lượng không được nhỏ hơn 0!"); return; }
+
+    await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, stock, unit, category })
+    });
+    
+    // Xóa trắng input và reload
+    document.getElementById("name").value = "";
+    document.getElementById("stock").value = "";
+    loadData();
+    updateDashboardStats();
+}
+
+async function updateDashboardStats() {
+    // 1. Lấy thống kê chiến dịch
+    const campRes = await fetch("/api/campaigns");
+    const campData = await campRes.json();
+    document.getElementById("campaign-count").innerText = campData.data.length;
+    
+    // Giả sử tổng quỹ là tổng goal_amount của các chiến dịch đang chạy
+    const totalFund = campData.data.reduce((sum, c) => sum + (c.goal_amount || 0), 0);
+    document.getElementById("total-fund").innerText = totalFund.toLocaleString();
+
+    // 2. Cập nhật biểu đồ sản phẩm
+    const prodRes = await fetch("/api/products");
+    const prodData = await prodRes.json();
+    updateProductChart(prodData.data);
+}
+
+// Hàm vẽ biểu đồ sản phẩm
+function updateProductChart(products) {
+    const ctx = document.getElementById('productChart').getContext('2d');
+    
+    // Nếu đã có biểu đồ, hãy hủy nó trước khi tạo cái mới
+    if (productChartInstance) {
+        productChartInstance.destroy();
+    }
+    
+    productChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: products.map(p => p.name),
+            datasets: [{
+                label: 'Số lượng tồn',
+                data: products.map(p => p.stock),
+                backgroundColor: '#28a745'
+            }]
+        },
+        options: { 
+            responsive: true, 
+            maintainAspectRatio: false 
+        }
+    });
+}
+
+async function loadRecipients() {
+    try {
+        // Gọi API từ backend (bạn cần viết API này trong main.py)
+        const res = await fetch("/api/recipients"); 
+        const result = await res.json();
+        const body = document.getElementById("recipient-body"); // ID của tbody trong bảng
+        
+        body.innerHTML = ""; // Xóa dữ liệu cũ trước khi load mới
+        
+        result.data.forEach(item => {
+            // Xác định màu sắc theo trạng thái
+            let rowClass = "";
+            if (item.status === "Khẩn cấp") rowClass = "table-danger";
+            else if (item.status === "Thiếu suất") rowClass = "table-warning";
+
+            // Render dòng dữ liệu vào bảng
+            body.innerHTML += `<tr class="${rowClass}">
+                <td>${item.name}</td>
+                <td>${item.address}</td>
+                <td>${item.status}</td>
+                <td>
+                    <a href="recipient_detail.html?id=${item.id}" class="btn btn-sm btn-outline-dark">Xem chi tiết</a>
+                </td>
+            </tr>`;
+        });
+    } catch (e) {
+        console.error("Lỗi load danh sách người nhận:", e);
+    }
+}
+
+async function loadDashboardStats() {
+    try {
+        const res = await fetch("/api/stats");
+        const data = await res.json();
+        
+        document.getElementById("user-count").innerText = data.user_count || 0;
+        document.getElementById("campaign-count").innerText = data.campaign_count || 0;
+        document.getElementById("donor-count").innerText = data.donor_count || 0; // Đảm bảo API trả về đúng key
+        document.getElementById("total-fund").innerText = (data.total_fund || 0).toLocaleString();
+    } catch (e) {
+        console.error("Lỗi load thống kê:", e);
+    }
+}
+// Gọi hàm này khi trang được tải
+loadDashboardStats();
+// Đừng quên gọi hàm này sau khi trang tải xong
+loadRecipients();
+loadData();
+updateDashboardStats();
     </script>
 </body>
 </html>
